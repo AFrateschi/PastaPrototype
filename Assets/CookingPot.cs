@@ -26,20 +26,7 @@ public class CookingPot : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(frameCount == 60)
-        {
-            frameCount = 0;
-            currentTemp = currentTemp + 1;
-        }
-        else if (frameCount > 60)
-        {
-            Debug.LogError("We messed up, frameCount went to high");
-            frameCount = 0;
-        }
-        else
-        {
-            frameCount++;
-        }
+        
           
        
     }
