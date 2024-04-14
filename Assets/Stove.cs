@@ -13,12 +13,42 @@ public class Stove : MonoBehaviour
     {
         knob = GetComponent<CircleCollider2D>();
         burner = GetComponentInChildren<BoxCollider2D>();
-        Hot = false;
+        BurnerOff();
     }
 
     private void OnMouseDown()
     {
-        Hot = !Hot;
+
+        if(Hot!=true)
+        {
+            BurnerOn();
+         }
+        else
+        {
+            BurnerOff();
+        }
+    }
+
+    private void BurnerOn()
+    {
+        Hot = true;
+        knobSprite.color = Color.red;
+        burnerSprite.color = Color.red;
+    }
+    private void BurnerOff()
+    {
+        Hot = false;
+        knobSprite.color = Color.gray;
+        burnerSprite.color = Color.gray;
+
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.Log("COLLISION ENTER");
+        foreach (ContactPoint2D contact in collision.contacts)
+        {
+            Debug.DrawRay(contact.point, contact.normal, Color.white);
+        }
     }
     // Start is called before the first frame update
     void Start()
