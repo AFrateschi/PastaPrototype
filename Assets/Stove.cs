@@ -18,6 +18,19 @@ public class Stove : MonoBehaviour
     [SerializeField] public float transferTemp;
     public CookingPot currentlyCooking;
 
+    [SerializeField] GameObject snapPos;
+    [SerializeField] float snapTolerance;
+    public bool doSnap;
+    Vector3 targetPos;
+
+    private void Update()
+    {
+        if (doSnap)
+        {
+            SnapPot();
+        }
+    }
+
     private void Awake()
     {
         knob = GetComponent<CircleCollider2D>();
@@ -59,15 +72,42 @@ public class Stove : MonoBehaviour
             currentlyCooking.StopCooking();
         }
     }
+
+
+
+    private void SnapPot()
+    {
+        if (Vector3.Distance(currentlyCooking.snapOffset.position, snapPos.transform.position) <= snapTolerance && currentlyCooking != null)
+        {
+            Transform temp = currentlyCooking.transform;
+            Vector2 vec = currentlyCooking.transform.position - targetPos;
+            currentlyCooking.GetComponent<Rigidbody2D>().AddForce(vec);
+        }
+        else
+        {
+            doSnap = false;
+        }
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        Debug.Log("entered");
+      //foreach (type ofName in Collection)
+      //    do this
+      // 
         foreach (ContactPoint2D contact in collision.contacts)
         {
             if (contact.rigidbody.gameObject.CompareTag("Heatable"))
             {
-                if (currentlyCooking == null)
+                if (currentlyCooking == null && Vector2.Distance(contact.rigidbody.gameObject.GetComponent<CookingPot>().snapOffset.transform.position, snapPos.transform.position) <= snapTolerance)
                 {
                     currentlyCooking = contact.rigidbody.gameObject.GetComponent<CookingPot>();
+
+                    doSnap = true;
+                    currentlyCooking.gameObject.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+                    currentlyCooking.transform.rotation = Quaternion.Euler(0, 0, 0);
+                    targetPos = snapPos.transform.position - currentlyCooking.snapOffset.localPosition;
+                    currentlyCooking.transform.position = targetPos;
                 }
                 else
                 {
@@ -89,11 +129,13 @@ public class Stove : MonoBehaviour
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.rigidbody.gameObject == currentlyCooking.gameObject)
+        Debug.Log("exit");
+        if (collision.rigidbody.gameObject == currentlyCooking.gameObject && currentlyCooking != null)
         {
             Debug.Log("Stopping Cooking...");
             currentlyCooking.StopCooking();
             currentlyCooking = null;
+            doSnap = false;
         }
     }
 }

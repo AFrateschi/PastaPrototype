@@ -15,11 +15,14 @@ public class CookingPot : MonoBehaviour
     [SerializeField] private float currentFill;
     [HideInInspector] public bool isFull;
     private float maxCapacity;
+    bool isCooking = false;
+    [SerializeField] public Transform snapOffset;
 
     // Start is called before the first frame update
     void Start()
     {
         currentFill = 500;
+
     }
 
     // Update is called once per frame
@@ -32,9 +35,12 @@ public class CookingPot : MonoBehaviour
 
     public void StartCooking(float _transferTemp)
     {
-        transferTemp = _transferTemp;
-        Debug.Log("CookingPot Cooking at " + _transferTemp + " Degrees per second");
-        InvokeRepeating("Cooking", 0, 0.3f);
+        if (isCooking)
+        {
+            transferTemp = _transferTemp;
+            Debug.Log("CookingPot Cooking at " + _transferTemp + " Degrees per second");
+            InvokeRepeating("Cooking", 0, 0.3f);
+        }
     }
 
     public void StopCooking()
