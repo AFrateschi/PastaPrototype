@@ -16,12 +16,13 @@ public class CookingPot : MonoBehaviour
     [HideInInspector] public bool isFull;
     private float maxCapacity;
     bool isCooking = false;
+    bool isFilling = false;
+    private float flowRate;
     [SerializeField] public Transform snapOffset;
 
     // Start is called before the first frame update
     void Start()
     {
-        currentFill = 500;
 
     }
 
@@ -33,6 +34,19 @@ public class CookingPot : MonoBehaviour
        
     }
 
+    public void StartFilling(float _flowRate)
+    { 
+        flowRate = _flowRate;
+        InvokeRepeating("Fill", 0, 0.3f);
+    }
+    public void StopFilling() 
+    {
+        CancelInvoke("Fill");
+    }
+    void Fill()
+    {
+        currentFill += flowRate;
+    }
     public void StartCooking(float _transferTemp)
     {
         if (isCooking)
@@ -45,7 +59,7 @@ public class CookingPot : MonoBehaviour
 
     public void StopCooking()
     {
-        CancelInvoke();
+        CancelInvoke("Cooking");
     }
 
     void Cooking()
