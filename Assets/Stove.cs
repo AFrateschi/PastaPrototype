@@ -9,6 +9,15 @@ public class Stove : MonoBehaviour
     [SerializeField] private bool Hot;
     [SerializeField] private SpriteRenderer knobSprite;
     [SerializeField] private SpriteRenderer burnerSprite;
+
+    [SerializeField] public Color32 knobOn;
+    [SerializeField] public Color32 knobOff;
+    [SerializeField] public Color32 burnerOn;
+    [SerializeField] public Color32 burnerOff;
+
+    [SerializeField] public float transferTemp;
+    public CookingPot currentlyCooking;
+
     private void Awake()
     {
         knob = GetComponent<CircleCollider2D>();
@@ -18,11 +27,10 @@ public class Stove : MonoBehaviour
 
     private void OnMouseDown()
     {
-
         if(Hot!=true)
         {
             BurnerOn();
-         }
+        }
         else
         {
             BurnerOff();
@@ -32,33 +40,60 @@ public class Stove : MonoBehaviour
     private void BurnerOn()
     {
         Hot = true;
-        knobSprite.color = Color.red;
-        burnerSprite.color = Color.red;
+        knobSprite.color = knobOn;
+        burnerSprite.color = burnerOn;
+
+        if (currentlyCooking != null)
+        {
+            currentlyCooking.StartCooking(transferTemp);
+        }
     }
     private void BurnerOff()
     {
         Hot = false;
-        knobSprite.color = Color.gray;
-        burnerSprite.color = Color.gray;
+        knobSprite.color = knobOff;
+        burnerSprite.color = burnerOff;
 
+        if (currentlyCooking != null)
+        {
+            currentlyCooking.StopCooking();
+        }
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("COLLISION ENTER");
         foreach (ContactPoint2D contact in collision.contacts)
         {
-            Debug.DrawRay(contact.point, contact.normal, Color.white);
+            if (contact.rigidbody.gameObject.CompareTag("Heatable"))
+            {
+                if (currentlyCooking == null)
+                {
+                    currentlyCooking = contact.rigidbody.gameObject.GetComponent<CookingPot>();
+                }
+                else
+                {
+                    Debug.Log("This Burner is already occupied!");
+                }
+
+                if (Hot)
+                {
+                    Debug.Log("Cooking at " + transferTemp + "...");
+                    currentlyCooking.StartCooking(transferTemp);
+                }
+                else
+                {
+                    Debug.Log("Man's not hot");
+                }
+            }
         }
     }
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
+    private void OnCollisionExit2D(Collision2D collision)
     {
-        
+        if (collision.rigidbody.gameObject == currentlyCooking.gameObject)
+        {
+            Debug.Log("Stopping Cooking...");
+            currentlyCooking.StopCooking();
+            currentlyCooking = null;
+        }
     }
 }

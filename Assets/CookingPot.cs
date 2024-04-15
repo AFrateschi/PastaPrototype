@@ -10,17 +10,16 @@ public class CookingPot : MonoBehaviour
     // [SerialiseField] private - Show up in inspector, not accessible by other scripts
     // [HideInInspector] public - Doesn't show in inspector, accessible by other scripts
     // private - Doesn't show in inspector, not accessible by other scripts
-    public int currentTemp;
+    public float currentTemp;
+    private float transferTemp;
     [SerializeField] private float currentFill;
     [HideInInspector] public bool isFull;
     private float maxCapacity;
-    private int frameCount;
 
     // Start is called before the first frame update
     void Start()
     {
         currentFill = 500;
-        frameCount = 600;
     }
 
     // Update is called once per frame
@@ -29,5 +28,22 @@ public class CookingPot : MonoBehaviour
         
           
        
+    }
+
+    public void StartCooking(float _transferTemp)
+    {
+        transferTemp = _transferTemp;
+        Debug.Log("CookingPot Cooking at " + _transferTemp + " Degrees per second");
+        InvokeRepeating("Cooking", 0, 0.3f);
+    }
+
+    public void StopCooking()
+    {
+        CancelInvoke();
+    }
+
+    void Cooking()
+    {
+        currentTemp += transferTemp;
     }
 }
