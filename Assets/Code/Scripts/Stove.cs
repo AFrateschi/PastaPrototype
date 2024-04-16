@@ -7,9 +7,12 @@ public class Stove : MonoBehaviour
     [SerializeField] public CircleCollider2D knob;
     [SerializeField] public BoxCollider2D burner;
     [SerializeField] private bool Hot;
+
+    // Sprite renderers for Knob an Burner objects
     [SerializeField] private SpriteRenderer knobSprite;
     [SerializeField] private SpriteRenderer burnerSprite;
 
+    // colors for knob sprites
     [SerializeField] public Color32 knobOn;
     [SerializeField] public Color32 knobOff;
     [SerializeField] public Color32 burnerOn;
