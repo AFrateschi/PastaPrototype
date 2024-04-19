@@ -5,13 +5,13 @@ using UnityEngine;
 public class Grabbable : InteractableObject
 {
     private bool isHeld;
-    private Rigidbody2D rigidbody;
+    private Rigidbody2D grabRigidbody;
     private GameManager gameManager;
 
     private void Awake()
     {
         isHeld = false;
-        rigidbody = GetComponent<Rigidbody2D>();
+        grabRigidbody = GetComponent<Rigidbody2D>();
     }
 
     public void ToggleGrab()
@@ -28,20 +28,20 @@ public class Grabbable : InteractableObject
 
     private void PickUp()
     {
-        Debug.Log(gameObject.name + " Is Picked Up");
+        //Debug.Log(gameObject.name + " Is Picked Up");
 
         isHeld = true;
-        rigidbody.velocity = Vector2.zero;
-        rigidbody.angularVelocity = 0;
-        rigidbody.bodyType = RigidbodyType2D.Kinematic;
+        grabRigidbody.velocity = Vector2.zero;
+        grabRigidbody.angularVelocity = 0;
+        grabRigidbody.bodyType = RigidbodyType2D.Kinematic;
     }
 
     private void Drop()
     {
-        Debug.Log(gameObject.name + " Is Dropped");
+        //Debug.Log(gameObject.name + " Is Dropped");
 
         isHeld = false;
-        rigidbody.bodyType = RigidbodyType2D.Dynamic;
+        grabRigidbody.bodyType = RigidbodyType2D.Dynamic;
     }
 
     public void DoRotate(int _input)

@@ -61,7 +61,7 @@ public class Interaction : MonoBehaviour
         }
         else
         {
-
+            // do dust particle effect if nothing to interact with
         }
     }
 
@@ -79,7 +79,7 @@ public class Interaction : MonoBehaviour
         }
         else
         {
-
+            // open context menu?
         }
     }
 
