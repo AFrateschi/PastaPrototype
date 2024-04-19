@@ -7,6 +7,8 @@ public class InteractableObject : MonoBehaviour, IInterface
 {
     [SerializeField] private UnityEvent primaryInteraction;
     [SerializeField] private UnityEvent secondaryInteraction;
+    [SerializeField] private UnityEvent mouseScrollUp;
+    [SerializeField] private UnityEvent mouseScrollDown;
 
     UnityEvent IInterface.OnPrimary
     {
@@ -20,8 +22,22 @@ public class InteractableObject : MonoBehaviour, IInterface
         set => secondaryInteraction = value;
     }
 
+    UnityEvent IInterface.OnScrollUp
+    {
+        get => mouseScrollUp;
+        set => mouseScrollUp = value;
+    }
+
+    UnityEvent IInterface.OnScrollDown
+    {
+        get => mouseScrollDown;
+        set => mouseScrollDown = value;
+    }
+
     public void PrimaryInteract() => primaryInteraction.Invoke();
     public void SecondaryInteract() => secondaryInteraction.Invoke();
+    public void ScrollUp() => mouseScrollUp.Invoke();
+    public void ScrollDown() => mouseScrollDown.Invoke();
 
     public void PrimaryTest()
     {
@@ -33,4 +49,13 @@ public class InteractableObject : MonoBehaviour, IInterface
         Debug.Log("Testing Secondary Interactable Object");
     }
 
+    public void ScrollUpTest()
+    {
+        Debug.Log("Scroll Up");
+    }
+
+    public void ScrollDownTest()
+    {
+        Debug.Log("Scroll Down");
+    }
 }

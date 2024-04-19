@@ -46,4 +46,9 @@ public class GameManager : MonoBehaviour
         function so that when we load a new scene this object instance will persist along with the data
         */
     }
+
+    public Vector3 GetMousePos()
+    {
+        return Camera.main.ScreenToWorldPoint(Input.mousePosition);
+    }
 }

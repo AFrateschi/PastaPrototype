@@ -10,10 +10,17 @@ public class Interaction : MonoBehaviour
     // this is how we're recieving our input data
     [SerializeField] private PlayerInput input;
 
+    private GameManager gameManager;
+
     // on awake we get input, this script should be attached to the Main camera, our "player body"
     private void Awake()
     {
         input = GetComponent<PlayerInput>();
+    }
+
+    private void Start()
+    {
+        gameManager = GameManager.Instance;
     }
 
     // when this is enabled subscribe the events to the input
@@ -21,6 +28,8 @@ public class Interaction : MonoBehaviour
     {
         input.actions["Primary Interact"].performed += DoPrimaryInteract;
         input.actions["Secondary Interact"].performed += DoSecondaryInteract;
+        input.actions["Scroll Up"].performed += DoScrollUp;
+        input.actions["Scroll Down"].performed += DoScrollDown;
     }
 
     // when disabled unsubscribe events to input
@@ -28,6 +37,8 @@ public class Interaction : MonoBehaviour
     {
         input.actions["Primary Interact"].performed -= DoPrimaryInteract;
         input.actions["Secondary Interact"].performed -= DoSecondaryInteract;
+        input.actions["Scroll Up"].performed -= DoScrollDown;
+        input.actions["Scroll Down"].performed -= DoScrollDown;
     }
 
     // just a simple funciton to return our raycast from our mosue for u, this function goes (Orgin, Direction, Distance and layer mask
@@ -69,6 +80,32 @@ public class Interaction : MonoBehaviour
         else
         {
 
+        }
+    }
+
+    private void DoScrollUp(InputAction.CallbackContext callbackContext)
+    {
+        RaycastHit2D hit = HandleRaycast();
+
+        if (hit.collider != null)
+        {
+            if (hit.collider.gameObject.TryGetComponent(out InteractableObject interactable))
+            {
+                interactable.ScrollUp();
+            }
+        }
+    }
+
+    private void DoScrollDown(InputAction.CallbackContext callbackContext)
+    {
+        RaycastHit2D hit = HandleRaycast();
+
+        if (hit.collider != null)
+        {
+            if (hit.collider.gameObject.TryGetComponent(out InteractableObject interactable))
+            {
+                interactable.ScrollDown();
+            }
         }
     }
 }
