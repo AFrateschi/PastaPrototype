@@ -5,10 +5,11 @@ using UnityEngine;
 public class Grabbable : InteractableObject
 {
     private bool isHeld;
-    private Rigidbody2D grabRigidbody;
+    [SerializeField] private Rigidbody2D grabRigidbody;
     private GameManager gameManager;
 
-    private void Awake()
+
+    protected virtual void Awake()
     {
         isHeld = false;
         grabRigidbody = GetComponent<Rigidbody2D>();
@@ -31,6 +32,7 @@ public class Grabbable : InteractableObject
         //Debug.Log(gameObject.name + " Is Picked Up");
 
         isHeld = true;
+        gameManager.currentlyHeld = this;
         grabRigidbody.velocity = Vector2.zero;
         grabRigidbody.angularVelocity = 0;
         grabRigidbody.bodyType = RigidbodyType2D.Kinematic;
@@ -41,6 +43,7 @@ public class Grabbable : InteractableObject
         //Debug.Log(gameObject.name + " Is Dropped");
 
         isHeld = false;
+        gameManager.currentlyHeld = null;
         grabRigidbody.bodyType = RigidbodyType2D.Dynamic;
     }
 

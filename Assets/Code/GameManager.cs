@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour
     /// This is how you get a reference to the one and only Game Manager, You should set this in your classes on Start()
     /// </summary>
     public static GameManager Instance;
+    public Grabbable currentlyHeld;
 
     private void Awake()
     {
@@ -34,6 +35,7 @@ public class GameManager : MonoBehaviour
         {
             DontDestroyOnLoad(gameObject);
             Instance = this;
+            currentlyHeld = null;
         }
         else if (gameObject != this)
         {
